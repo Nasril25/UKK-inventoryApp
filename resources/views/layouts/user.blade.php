@@ -310,7 +310,7 @@ body {
         <ul class="navbar-nav">
           @auth
             <li class="nav-item">
-              <a class="nav-link" href="{{ route('user.profile.show') }}" style="color: #e50914;">
+              <a class="nav-link" href="{{ route('user.profile.edit') }}" style="color: #e50914;">
                 <i class="bi bi-person-circle me-1" style="font-size: 1.5rem;"></i> Halo, {{ auth()->user()->name }}
               </a>
             </li>
@@ -350,12 +350,21 @@ body {
         </li>
         @auth
           @if (auth()->user()->type === 'user')
+            <!-- Asset Management -->
+
             <li class="nav-item">
               <a href="{{ route('user.hitung_depresiasi.index') }}" class="nav-link">
                 <i class="bi bi-calculator-fill"></i>
                 <span class="nav-label">Hitung Depresiasi</span>
               </a>
               <span class="nav-tooltip">Hitung Depresiasi</span>
+            </li>
+            <li class="nav-item">
+              <a href="{{ route('user.pengadaan.index') }}" class="nav-link">
+                <i class="bi bi-cart"></i>
+                <span class="nav-label">Pengadaan</span>
+              </a>
+              <span class="nav-tooltip">Pengadaan</span>
             </li>
           @endif
         @endauth

@@ -49,7 +49,19 @@
                         <td>{{ $item->satuan->satuan }}</td>
                         <td>{{ $item->subKategoriAsset->sub_kategori_asset }}</td>
                         <td>{{ $item->distributor->nama_distributor }}</td>
-                        <td>{{ $item->no_invoice }}</td>
+                        <td>
+                            @php
+                                $invoices = explode(';', $item->no_invoice);
+                            @endphp
+                            @foreach ($invoices as $invoice)
+                                @php
+                                    $invoiceParts = explode(':', $invoice);
+                                    $no_invoice = $invoiceParts[0] ?? 'N/A';
+                                    $jumlah_barang = $invoiceParts[1] ?? '0';
+                                @endphp
+                                {{ $no_invoice }} ({{ $jumlah_barang }})<br>
+                            @endforeach
+                        </td>
                         <td>{{ $item->no_seri_barang }}</td>
                         <td>{{ $item->tahun_produksi }}</td>
                         <td>{{ $item->tgl_pengadaan }}</td>
@@ -60,8 +72,8 @@
                         <td>{{ $item->fb == 1 ? 'Aktif' : 'Tidak Aktif' }}</td>
                         <td>{{ $item->keterangan }}</td>
                         <td>
-                            <a href="{{ route('pengadaan.show', $item->id_pengadaan) }}" class="btn btn-info btn-sm">Detail</a>
-                            <a href="{{ route('pengadaan.edit', $item->id_pengadaan) }}" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="{{ route('pengadaan.show', $item->id_pengadaan) }}" class="btn btn-info btn-sm mb-1">Detail</a>
+                            <a href="{{ route('pengadaan.edit', $item->id_pengadaan) }}" class="btn btn-warning btn-sm mb-1">Edit</a>
                             <form action="{{ route('pengadaan.destroy', $item->id_pengadaan) }}" method="POST" class="d-inline">
                                 @csrf
                                 @method('DELETE')

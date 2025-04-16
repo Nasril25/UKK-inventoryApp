@@ -315,16 +315,16 @@
 
         <!-- Add more cards here for other entities as needed -->
 
-    </div>
+    <!-- </div>
     <div class="row mt-5">
         <div class="col-md-6">
             <canvas id="dataPieChart"></canvas>
         </div>
     </div>
-</div>
+</div> -->
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+<!-- <script>
     document.addEventListener('DOMContentLoaded', function () {
         var ctx = document.getElementById('dataPieChart').getContext('2d');
         var dataPieChart = new Chart(ctx, {
@@ -392,5 +392,5 @@
             }
         });
     });
-</script>
+</script> -->
 @endsection

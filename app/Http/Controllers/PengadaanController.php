@@ -96,7 +96,10 @@ class PengadaanController extends Controller
             'id_sub_kategori_asset' => 'required',
             'id_distributor' => 'required',
             'kode_pengadaan' => 'required|unique:tbl_pengadaan',
-            'no_invoice' => 'required',
+            'no_invoice' => 'required|array',
+            'no_invoice.*' => 'required|string',
+            'jumlah_barang_invoice' => 'required|array',
+            'jumlah_barang_invoice.*' => 'required|integer|min:1',
             'no_seri_barang' => 'required',
             'tahun_produksi' => 'required|integer',
             'tgl_pengadaan' => 'required|date',
@@ -106,6 +109,14 @@ class PengadaanController extends Controller
             'keterangan' => 'nullable|string|max:255',
         ]);
 
+        // Serialize invoice data
+        $invoices = [];
+        foreach ($request->no_invoice as $index => $no_invoice) {
+            $jumlah_barang = $request->jumlah_barang_invoice[$index] ?? '0';
+            $invoices[] = $no_invoice . ':' . $jumlah_barang;
+        }
+        $serializedInvoices = implode(';', $invoices);
+
         // Hitung nilai barang
         $nilaiBarang = $request->harga_barang * $request->jumlah_barang;
 
@@ -114,7 +125,11 @@ class PengadaanController extends Controller
         $penyusutanPerBulan = $request->harga_barang / $lamaDepresiasi;
 
         // Simpan data pengadaan
-        $pengadaan = Pengadaan::create(array_merge($request->all(), ['nilai_barang' => $nilaiBarang, 'depresiasi_barang' => $penyusutanPerBulan]));
+        Pengadaan::create(array_merge($request->except(['no_invoice', 'jumlah_barang_invoice']), [
+            'no_invoice' => $serializedInvoices,
+            'nilai_barang' => $nilaiBarang,
+            'depresiasi_barang' => $penyusutanPerBulan
+        ]));
 
         return redirect()->route('pengadaan.index')->with('success', 'Pengadaan berhasil disimpan beserta depresiasi.');
     }
@@ -156,7 +171,10 @@ class PengadaanController extends Controller
             'id_sub_kategori_asset' => 'required',
             'id_distributor' => 'required',
             'kode_pengadaan' => 'required|string|max:50',
-            'no_invoice' => 'required',
+            'no_invoice' => 'required|array',
+            'no_invoice.*' => 'required|string',
+            'jumlah_barang_invoice' => 'required|array',
+            'jumlah_barang_invoice.*' => 'required|integer|min:1',
             'no_seri_barang' => 'required',
             'tahun_produksi' => 'required|integer',
             'tgl_pengadaan' => 'required|date',
@@ -165,23 +183,35 @@ class PengadaanController extends Controller
             'fb' => 'required|in:0,1',
             'keterangan' => 'nullable|string|max:255',
         ]);
-    
+
         $pengadaan = Pengadaan::findOrFail($id);
+
+        // Serialize invoice data
+        $invoices = [];
+        foreach ($request->no_invoice as $index => $no_invoice) {
+            $jumlah_barang = $request->jumlah_barang_invoice[$index] ?? '0';
+            $invoices[] = $no_invoice . ':' . $jumlah_barang;
+        }
+        $serializedInvoices = implode(';', $invoices);
 
         // Hitung nilai barang
         $nilaiBarang = $request->harga_barang * $request->jumlah_barang;
-    
-        $pengadaan->update(array_merge($request->all(), ['nilai_barang' => $nilaiBarang]));
-    
+
+        // Update data pengadaan
+        $pengadaan->update(array_merge($request->except(['no_invoice', 'jumlah_barang_invoice']), [
+            'no_invoice' => $serializedInvoices,
+            'nilai_barang' => $nilaiBarang
+        ]));
+
         // Hitung ulang depresiasi
         $lamaDepresiasi = Depresiasi::find($request->id_depresiasi)->lama_depresiasi;
         $penyusutanPerBulan = $request->harga_barang / $lamaDepresiasi;
         $pengadaan->depresiasi_barang = $penyusutanPerBulan;
         $pengadaan->save();
-    
+
         return redirect()->route('pengadaan.index')->with('success', 'Data pengadaan berhasil diperbarui beserta depresiasi.');
     }
-    
+
     /**
      * Menghapus data pengadaan.
      */
@@ -202,5 +232,40 @@ class PengadaanController extends Controller
     {
         $pengadaan = Pengadaan::with(['masterBarang', 'merk', 'depresiasi', 'satuan', 'subKategoriAsset', 'distributor'])->findOrFail($id);
         return view('admin.pengadaan.show', compact('pengadaan'));
+    }
+    public function userShow($id)
+    {
+        $pengadaan = Pengadaan::with(['masterBarang', 'merk', 'depresiasi', 'satuan', 'subKategoriAsset', 'distributor'])->findOrFail($id);
+        return view('user.pengadaan.show', compact('pengadaan'));
+    }
+
+    public function updateInvoice(Request $request, $id)
+    {
+        $request->validate([
+            'no_invoice' => 'required|string',
+            'jumlah_barang_invoice' => 'required|integer|min:1',
+        ]);
+
+        $pengadaan = Pengadaan::findOrFail($id);
+
+        // Deserialize invoice data
+        $invoices = explode(';', $pengadaan->no_invoice);
+        $updatedInvoices = [];
+        foreach ($invoices as $invoice) {
+            $invoiceParts = explode(':', $invoice);
+            if ($invoiceParts[0] == $request->no_invoice) {
+                $updatedInvoices[] = $request->no_invoice . ':' . $request->jumlah_barang_invoice;
+            } else {
+                $updatedInvoices[] = $invoice;
+            }
+        }
+        $serializedInvoices = implode(';', $updatedInvoices);
+
+        // Update the invoice data
+        $pengadaan->update([
+            'no_invoice' => $serializedInvoices,
+        ]);
+
+        return redirect()->route('pengadaan.edit', $id)->with('success', 'Invoice berhasil diperbarui.');
     }
 }

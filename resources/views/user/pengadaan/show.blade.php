@@ -1,9 +1,9 @@
-@extends('layouts.app')
+@extends('layouts.user')
 
 @section('content')
 <div class="container mt-4">
     <h1>Detail Pengadaan</h1>
-    <a href="{{ route('pengadaan.index') }}" class="btn btn-secondary mb-3">Kembali</a>
+    <a href="{{ route('user.pengadaan.index') }}" class="btn btn-secondary mb-3">Kembali</a>
     <div class="card">
         <div class="card-header">
             Detail Pengadaan

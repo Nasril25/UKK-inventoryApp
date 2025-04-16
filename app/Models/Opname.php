@@ -17,6 +17,7 @@ class Opname extends Model
         'tgl_opname',
         'kondisi',
         'keterangan',
+        'jumlah_barang',
     ];
 
     public function pengadaan()

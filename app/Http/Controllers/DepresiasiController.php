@@ -45,7 +45,7 @@ class DepresiasiController extends Controller
     {
         $request->validate([
             'lama_depresiasi' => 'required|integer',
-            'keterangan' => 'nullable|string|max:45',
+            'keterangan' => 'nullable|string|max:100',
         ]);
 
         Depresiasi::create($request->all());
@@ -63,7 +63,7 @@ class DepresiasiController extends Controller
     {
         $request->validate([
             'lama_depresiasi' => 'required|integer',
-            'keterangan' => 'nullable|string|max:45',
+            'keterangan' => 'nullable|string|max:100',
         ]);
 
         $depresiasi = Depresiasi::findOrFail($id);

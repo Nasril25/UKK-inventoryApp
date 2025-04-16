@@ -21,6 +21,7 @@
                     <th>Kode Pengadaan</th>
                     <th>Tanggal Opname</th>
                     <th>Kondisi</th>
+                    <th>Jumlah Barang</th>
                     <th>Keterangan</th>
                     <th>Aksi</th>
                 </tr>
@@ -32,8 +33,10 @@
                     <td>{{ $opname->pengadaan->kode_pengadaan ?? 'N/A' }}</td>
                     <td>{{ $opname->tgl_opname }}</td>
                     <td>{{ $opname->kondisi }}</td>
+                    <td>{{ $opname->jumlah_barang }}</td>
                     <td>{{ $opname->keterangan }}</td>
                     <td>
+                        <a href="{{ route('opname.show', $opname->id_opname) }}" class="btn btn-info btn-sm">Detail</a>
                         <a href="{{ route('opname.edit', $opname->id_opname) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('opname.destroy', $opname->id_opname) }}" method="POST" class="d-inline">
                             @csrf

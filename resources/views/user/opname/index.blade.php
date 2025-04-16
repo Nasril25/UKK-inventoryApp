@@ -3,7 +3,6 @@
 @section('content')
 <div class="container mt-4">
     <h1>Data Opname</h1>
-    <a href="{{ route('user.opname.create') }}" class="btn btn-primary mb-3">Tambah Opname</a>
     <form action="{{ route('user.opname.index') }}" method="GET" class="mb-4">
         <div class="input-group">
             <input type="text" name="search" class="form-control" placeholder="Cari berdasarkan Kode Pengadaan, Tanggal Opname, Kondisi" value="{{ request('search') }}">
@@ -18,7 +17,6 @@
                 <th>Tanggal Opname</th>
                 <th>Kondisi</th>
                 <th>Keterangan</th>
-                <th>Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -29,14 +27,6 @@
                 <td>{{ $opname->tgl_opname }}</td>
                 <td>{{ $opname->kondisi }}</td>
                 <td>{{ $opname->keterangan }}</td>
-                <td>
-                    <a href="{{ route('user.opname.edit', $opname->id_opname) }}" class="btn btn-warning btn-sm">Edit</a>
-                    <form action="{{ route('user.opname.destroy', $opname->id_opname) }}" method="POST" class="d-inline">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
-                    </form>
-                </td>
             </tr>
             @empty
                     <tr>

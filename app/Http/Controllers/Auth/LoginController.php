@@ -55,15 +55,27 @@ class LoginController extends Controller
      
         if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password'])))
         {
-            if (auth()->user()->type == 'admin') {
-                return redirect()->route('admin.home');
-            }else{
-                return redirect()->route('user.home');
-            }
+            $userType = auth()->user()->type == 'admin' ? 'Admin' : 'User';
+            return redirect()->route(auth()->user()->type == 'admin' ? 'admin.home' : 'user.home')
+                ->with('success', 'Berhasil login sebagai ' . $userType);
         }else{
             return redirect()->route('login')
-                ->with('error','Email-Address And Password Are Wrong.');
+                ->with('error','Email atau password salah.');
         }
           
+    }
+
+    protected function sendFailedLoginResponse(Request $request)
+    {
+        $errors = [$this->username() => trans('auth.failed')];
+
+        if ($request->expectsJson()) {
+            return response()->json($errors, 422);
+        }
+
+        return redirect()->back()
+            ->withInput($request->only($this->username(), 'remember'))
+            ->withErrors($errors)
+            ->with('error', 'Email atau password salah.');
     }
 }

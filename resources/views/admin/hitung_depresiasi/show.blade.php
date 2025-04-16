@@ -21,7 +21,7 @@
             @for ($i = 1; $i <= $usiaBarang; $i++)
             <tr>
                 <td>{{ $i }}</td>
-                <td>{{ number_format($hargaBarang - ($depresiasiBulanan * $i), 2) }}</td>
+                <td>{{ $i == 1 ? number_format($hargaBarang, 2) : number_format($hargaBarang - ($depresiasiBulanan * ($i - 1)), 2) }}</td>
             </tr>
             @endfor
         </tbody>

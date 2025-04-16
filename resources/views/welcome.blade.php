@@ -64,7 +64,7 @@
             color: #ffffff;
         }
         footer {
-            background-color: #831010;
+            background-color: #DB0000;
             color: #ffffff;
             padding: 20px 0;
         }

@@ -151,6 +151,20 @@
                 </div>
             </a>
         </div>
+        <div class="col-12 mb-4">
+            <a href="{{ route('user.pengadaan.index') }}" style="text-decoration: none;">
+                <div class="card bg-warning text-white h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Pengadaan</h5>
+                        <p class="card-text">{{ $pengadaanCount ?? 0 }} Total Pengadaan</p>
+                    </div>
+                    <div class="card-footer d-flex align-items-center justify-content-between">
+                        <span>View More</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
 </div>
 @endsection

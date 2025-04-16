@@ -27,7 +27,7 @@ class DashboardUserController extends Controller
         // $distributorCount = Distributor::count();
         // $depresiasiCount = Depresiasi::count();
         // $masterBarangCount = MasterBarang::count();
-        // $pengadaanCount = Pengadaan::count();
+        $pengadaanCount = Pengadaan::count();
         // $mutasiLokasiCount = MutasiLokasi::count();
         // $lokasiCount = Lokasi::count();
         // $opnameCount = Opname::count();
@@ -41,7 +41,7 @@ class DashboardUserController extends Controller
             // 'distributorCount' => $distributorCount,
             // 'depresiasiCount' => $depresiasiCount,
             // 'masterBarangCount' => $masterBarangCount,
-            // 'pengadaanCount' => $pengadaanCount,
+            'pengadaanCount' => $pengadaanCount,
             // 'mutasiLokasiCount' => $mutasiLokasiCount,
             // 'lokasiCount' => $lokasiCount,
             // 'opnameCount' => $opnameCount,

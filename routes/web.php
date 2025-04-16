@@ -40,7 +40,7 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
     // profile
     Route::get('user/profile/edit', [ProfileController::class, 'userEdit'])->name('user.profile.edit');
     Route::get('user/profile', [ProfileController::class, 'userShow'])->name('user.profile.show');
-    Route::patch('user/profile', [ProfileController::class, 'userUpdate'])->name('user.profile.update');
+    Route::patch('user/profile', [ProfileController::class, 'updateUser'])->name('user.profile.update');
     Route::delete('user/profile', [ProfileController::class, 'userDestroy'])->name('user.profile.destroy');
     Route::put('/user/password', [ProfileController::class, 'updateUserPassword'])->name('user.password.update');
     
@@ -54,12 +54,10 @@ Route::middleware(['auth', 'user-access:user'])->group(function () {
     // Route::get('user/mutasi_lokasi', [MutasiLokasiController::class, 'Userindex'])->name('user.mutasi_lokasi.index');
 
     // // Pengadaan
-    // Route::get('user/pengadaan', [PengadaanController::class, 'Userindex'])->name('user.pengadaan.index');
-    // Route::get('user/pengadaan/create', [PengadaanController::class, 'Usercreate'])->name('user.pengadaan.create');
-    // Route::post('user/pengadaan', [PengadaanController::class, 'Userstore'])->name('user.pengadaan.store');
-    // Route::get('user/pengadaan/{pengadaan}/edit', [PengadaanController::class, 'Useredit'])->name('user.pengadaan.edit');
-    // Route::put('user/pengadaan/{pengadaan}', [PengadaanController::class, 'Userupdate'])->name('user.pengadaan.update');
-    // Route::delete('user/pengadaan/{pengadaan}', [PengadaanController::class, 'Userdestroy'])->name('user.pengadaan.destroy');
+    Route::get('user/pengadaan', [PengadaanController::class, 'Userindex'])->name('user.pengadaan.index');
+    Route::get('user/pengadaan/{pengadaan}', [PengadaanController::class, 'userShow'])->name('user.pengadaan.show'); // Tambahkan ini
+
+
 
     // // Master Barang
     // Route::get('user/master_barang', [MasterBarangController::class, 'Userindex'])->name('user.master_barang.index');
@@ -96,10 +94,10 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::get('/admin', [DashboardController::class, 'index'])->name('admin.home');
 
      // profile
-     Route::get('admin/profile/edit', [ProfileController::class, 'edit'])->name('admin.profile.edit');
-     Route::get('admin/profile', [ProfileController::class, 'show'])->name('admin.profile.show');
-     Route::patch('admin/profile', [ProfileController::class, 'update'])->name('admin.profile.update'); // Ensure method is PATCH
-     Route::delete('admin/profile', [ProfileController::class, 'destroy'])->name('admin.profile.destroy');
+     Route::get('admin/profile/edit', [ProfileController::class, 'adminEdit'])->name('admin.profile.edit');
+     Route::get('admin/profile', [ProfileController::class, 'adminShow'])->name('admin.profile.show');
+     Route::patch('admin/profile', [ProfileController::class, 'updateAdmin'])->name('admin.profile.update'); // Ensure method is PATCH
+     Route::delete('admin/profile', [ProfileController::class, 'adminDestroy'])->name('admin.profile.destroy');
      Route::put('/admin/password', [ProfileController::class, 'updateAdminPassword'])->name('admin.password.update');
 
     // Kategori Asset
@@ -158,6 +156,7 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::get('admin/opname/{opname}/edit', [OpnameController::class, 'edit'])->name('opname.edit');
     Route::put('admin/opname/{opname}', [OpnameController::class, 'update'])->name('opname.update');
     Route::delete('admin/opname/{opname}', [OpnameController::class, 'destroy'])->name('opname.destroy');
+    Route::get('admin/opname/{opname}', [OpnameController::class, 'show'])->name('opname.show'); // Add this line
     
     // Distributor
     Route::get('admin/distributor', [DistributorController::class, 'index'])->name('distributor.index');
@@ -200,4 +199,3 @@ Route::middleware(['auth', 'user-access:admin'])->group(function () {
     Route::delete('admin/hitung_depresiasi/{hitung_depresiasi}', [HitungDepresiasiController::class, 'destroy'])->name('hitung_depresiasi.destroy');
     Route::get('admin/hitung_depresiasi/{id}/show', [HitungDepresiasiController::class, 'show'])->name('hitung_depresiasi.show');
 });
-

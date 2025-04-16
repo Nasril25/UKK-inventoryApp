@@ -71,10 +71,26 @@
                 @endforeach
             </select>
         </div>
-        <div class="mb-3">
-            <label for="no_invoice" class="form-label">No Invoice</label>
-            <input type="text" class="form-control" id="no_invoice" name="no_invoice" value="{{ $pengadaan->no_invoice }}" required>
+        <div id="invoice-section">
+            @php
+                $invoices = explode(';', $pengadaan->no_invoice);
+            @endphp
+            @foreach ($invoices as $invoice)
+                @php
+                    $invoiceParts = explode(':', $invoice);
+                    $no_invoice = $invoiceParts[0] ?? 'N/A';
+                    $jumlah_barang = $invoiceParts[1] ?? '0';
+                @endphp
+                <div class="mb-3 invoice-item">
+                    <label for="no_invoice" class="form-label">No Invoice</label>
+                    <input type="text" class="form-control" name="no_invoice[]" value="{{ $no_invoice }}" required>
+                    <label for="jumlah_barang_invoice" class="form-label mt-2">Jumlah Barang</label>
+                    <input type="number" class="form-control" name="jumlah_barang_invoice[]" value="{{ $jumlah_barang }}" required>
+                    <button type="button" class="btn btn-danger mt-2 remove-invoice">Hapus Invoice</button>
+                </div>
+            @endforeach
         </div>
+        <button type="button" class="btn btn-secondary mt-2" id="add-invoice">Tambah Invoice</button>
         <div class="mb-3">
             <label for="no_seri_barang" class="form-label">No Seri Barang</label>
             <input type="text" class="form-control" id="no_seri_barang" name="no_seri_barang" value="{{ $pengadaan->no_seri_barang }}" required>
@@ -109,4 +125,25 @@
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
 </div>
+<script>
+    document.getElementById('add-invoice').addEventListener('click', function() {
+        const invoiceSection = document.getElementById('invoice-section');
+        const newInvoice = document.createElement('div');
+        newInvoice.classList.add('mb-3', 'invoice-item');
+        newInvoice.innerHTML = `
+            <label for="no_invoice" class="form-label">No Invoice</label>
+            <input type="text" class="form-control" name="no_invoice[]" placeholder="Masukkan nomor invoice" required>
+            <label for="jumlah_barang_invoice" class="form-label mt-2">Jumlah Barang</label>
+            <input type="number" class="form-control" name="jumlah_barang_invoice[]" placeholder="Masukkan jumlah barang untuk invoice ini" required>
+            <button type="button" class="btn btn-danger mt-2 remove-invoice">Hapus Invoice</button>
+        `;
+        invoiceSection.appendChild(newInvoice);
+    });
+
+    document.addEventListener('click', function(event) {
+        if (event.target.classList.contains('remove-invoice')) {
+            event.target.closest('.invoice-item').remove();
+        }
+    });
+</script>
 @endsection
